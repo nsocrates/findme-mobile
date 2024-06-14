@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "findmeexpo",
-    "slug": "findmeexpo",
+    "name": "findme",
+    "slug": "findme",
+    "privacy": "unlisted",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,22 +10,65 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#fafafa"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nsocrates.findme",
+      "infoPlist": {
+        "NSLocationUsageDescription": "FindMe is using your location.",
+        "NSLocationWhenInUseUsageDescription": "FindMe is using your location.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Always allow FindMe to use your location.",
+        "NSLocationAlwaysUsageDescription": "Always allow FindMe to use your location.",
+        "UIBackgroundModes": [
+          "location"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#fafafa"
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "build": {
+      "development": {
+        "developmentClient": true,
+        "distribution": "internal"
+      },
+      "preview": {
+        "distribution": "internal"
+      },
+      "production": {}
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow FindMe to use your location.",
+          "locationAlwaysPermission": "Always allow FindMe to use your location.",
+          "locationWhenInUsePermission": "Allow FindMe to use your location.",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d74dfcb4-ea2d-4c59-9f11-e238b3b292b9"
+      }
     }
   }
 }
