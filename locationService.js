@@ -3,6 +3,7 @@ import * as TaskManager from 'expo-task-manager'
 
 const TASK = 'BROADCAST_LOCATION'
 const WS_URL = process.env.EXPO_PUBLIC_WS_URL
+const SECRET_KEY = process.env.EXPO_PUBLIC_SECRET_KEY
 
 const locationService = (function () {
   const subs = []
@@ -45,8 +46,12 @@ const locationService = (function () {
     if (nextLat !== lat || nextLng !== lng) {
       const action = 'broadcast'
       const message = [nextLat, nextLng]
-      const broadcast = JSON.stringify({ action, message })
-      console.log(broadcast)
+      const broadcast = JSON.stringify({
+        action,
+        message,
+        secretKey: SECRET_KEY,
+      })
+      console.log('Updated location:', message)
       state.coords = message
       socket.send(broadcast)
       publish()
