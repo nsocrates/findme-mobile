@@ -1,4 +1,4 @@
-# FindMe
+# findme
 
 ```bash
 npx expo prebuild --clean

@@ -4,8 +4,6 @@ import * as TaskManager from 'expo-task-manager'
 const TASK = 'BROADCAST_LOCATION'
 const WS_URL = process.env.EXPO_PUBLIC_WS_URL
 
-const noop = () => {}
-
 const locationService = (function () {
   const subs = []
   const state = { coords: [] }
@@ -31,19 +29,24 @@ const locationService = (function () {
       return
     }
 
-    if (!data) {
+    const location = data?.locations[0]
+
+    if (!location) {
       return
     }
 
     const {
       coords: { latitude, longitude },
-    } = data.locations[0]
+    } = location
     const [lat, lng] = state.coords
+    const nextLat = parseFloat(latitude.toFixed(5))
+    const nextLng = parseFloat(longitude.toFixed(5))
 
-    if (latitude !== lat || longitude !== lng) {
+    if (nextLat !== lat || nextLng !== lng) {
       const action = 'broadcast'
-      const message = [latitude, longitude]
+      const message = [nextLat, nextLng]
       const broadcast = JSON.stringify({ action, message })
+      console.log(broadcast)
       state.coords = message
       socket.send(broadcast)
       publish()
@@ -51,21 +54,26 @@ const locationService = (function () {
   }
 
   const startLocationUpdatesAsync = () => {
+    console.log('startLocationUpdatesAsync')
     return Location.startLocationUpdatesAsync(TASK, {
       accuracy: Location.Accuracy.HighestAccuracy,
       activityType: Location.ActivityType.Fitness,
       pausesUpdatesAutomatically: true,
       showsBackgroundLocationIndicator: true,
       foregroundService: { killServiceOnDestroy: true },
-    }).catch(noop)
+    }).catch(console.error)
   }
 
   const stopLocationUpdatesAsync = () => {
-    return Location.stopLocationUpdatesAsync(TASK).catch(noop)
+    console.log('stopLocationUpdatesAsync')
+    return Location.stopLocationUpdatesAsync(TASK).catch(console.error)
   }
 
   socket.addEventListener('open', () => {
-    TaskManager.defineTask(TASK, handleLocationTask)
+    if (!TaskManager.isTaskDefined(TASK)) {
+      TaskManager.defineTask(TASK, handleLocationTask)
+    }
+
     return true
   })
 
