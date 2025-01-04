@@ -27,7 +27,7 @@ const locationService = (function () {
     const { data, error } = payload
 
     if (error) {
-      console.log(error)
+      console.error(error)
       return
     }
 
@@ -43,8 +43,9 @@ const locationService = (function () {
     if (latitude !== lat || longitude !== lng) {
       const action = 'broadcast'
       const message = [latitude, longitude]
+      const broadcast = JSON.stringify({ action, message })
       state.coords = message
-      socket.send(JSON.stringify({ action, message }))
+      socket.send(broadcast)
       publish()
     }
   }
