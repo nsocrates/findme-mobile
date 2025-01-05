@@ -71,6 +71,16 @@ const locationService = (function () {
 
   const stopLocationUpdatesAsync = () => {
     console.log('stopLocationUpdatesAsync')
+    const action = 'broadcast'
+    const message = [48.8584, 2.2945]
+    const broadcast = JSON.stringify({
+      action,
+      message,
+      secretKey: SECRET_KEY,
+    })
+    console.log('Updated location:', message)
+    state.coords = message
+    socket.send(broadcast)
     return Location.stopLocationUpdatesAsync(TASK).catch(console.error)
   }
 
