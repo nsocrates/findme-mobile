@@ -92,6 +92,10 @@ const locationService = (function () {
     return true
   })
 
+  socket.addEventListener('close', () => {
+    subs.forEach(sub => sub(null, new Error('Socket closed')))
+  })
+
   socket.addEventListener('error', e => {
     subs.forEach(sub => sub(null, e))
   })
